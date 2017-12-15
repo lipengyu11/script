@@ -1,0 +1,35 @@
+global
+        log 127.0.0.1 local2
+        daemon
+        maxconn 256
+        log 127.0.0.1 local2 info
+defaults
+        log global
+        mode http
+        timeout connect 5000ms
+        timeout client 50000ms
+        timeout server 50000ms
+        option  dontlognull
+listen stats :8888
+        stats enable
+        stats uri       /admin
+        stats auth      admin:1234
+frontend eddy.org
+        bind 0.0.0.0:80
+        option httplog
+        option httpclose
+        option  forwardfor
+        log global
+        acl www hdr_reg(host) -i www.eddy.org
+        use_backend www.eddy.org if www
+
+backend www.lipengyu.org
+        server 101.1.7.9  weight 20 maxconn 31123
+backend www.baidu.com
+        server 102.1.7.93  weight 20 maxconn 1231231
+backend www.google.com
+        server 103.1.7.93  weight 20 maxconn 1231231
+backend www.aiqiye.com
+        server 104.1.74.42  weight 20 maxconn 1231231
+backend www.youku.com
+        server 121.122.7.90  weight 20 maxconn 1231231
